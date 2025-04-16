@@ -7,55 +7,53 @@ import {
   Toolbar,
   LinearProgress,
   Button,
+  Menu,
+  MenuItem
 } from "@mui/material";
 import RemoteRenderView from "./RemoteRenderingView";
-// import ClientRenderingView from "./ClientRenderingView";
-// import RemoteRenderView2 from "./RemoteRenderingView2";
 // import axios from "axios";
 
 const TOPIC = "mpr.channel";
+
 function App() {
   const context = useRef({});
   const [client, setClient] = useState(null);
   const [busy, setBusy] = useState(0);
   const [crosslinePositions, setCrosslinePositions] = useState(null);
 
-  // console.log("re-render");
+  const [anchorElRotate, setAnchorElRotate] = useState(null);
+  const openRotate = Boolean(anchorElRotate);
+  const handleClickRotate = (event) => setAnchorElRotate(event.currentTarget);
+  const handleCloseRotate = () => setAnchorElRotate(null);
+
+  const [anchorElMeasurement, setAnchorElMeasurement] = useState(null);
+  const openMeasurement = Boolean(anchorElMeasurement);
+  const handleClickMeasurement = (event) => setAnchorElMeasurement(event.currentTarget);
+  const handleCloseMeasurement = () => setAnchorElMeasurement(null);
+
+  const [anchorElPreset, setAnchorElPreset] = useState(null);
+  const openPreset = Boolean(anchorElPreset);
+  const handleClickPreset = (event) => setAnchorElPreset(event.currentTarget);
+  const handleClosePreset = () => setAnchorElPreset(null);
 
   useEffect(() => {
-    // axios.post("https://viewer.saolasoft.vn/ws/rest/v1/session3d/websocketlink",
+    // axios.post("http://localhost:8888/ws/rest/v1/session3d/websocketlink",
     //   {
-    //     session2D: "315d7a54-6710-4180-bc0a-d2e10764ce93",
-    //     studyUID: "2.25.313472556869089568467430831702503378132",
-    //     seriesUID: "1.2.840.113619.2.495.13407973.1393672.30831.1725321555.543"
+    //     session2D: "3dcc5814-942b-431d-8595-035c3b1f26d4",
+    //     studyUID: "2.25.71595247674320627900972793100987989188",
+    //     seriesUID: "1.2.840.113619.2.428.3.678656.872.1740100172.148.3"
     //   }
     // ).then(function (response) {
     //   let wsURL = response.data?.websocketUrl;
     //   if (wsURL) {
-    //     let temp = `wss://viewer.saolasoft.vn${wsURL}`;
+    //     let temp = `ws://localhost:8888${wsURL}`;
     //     wslink.connect(context.current, setClient, setBusy, temp);
     //   }
     // }).catch(function (error) {
     //   console.log("error: ", error);
     // })
-
-    // axios.post("http://192.168.1.6:8888/ws/rest/v1/session3d/websocketlink",
-    //   {
-    //     session2D: "47ffdf80-43a6-4ca9-95ef-e83e9c00a5b8",
-    //     studyUID: "2.25.273770070420816203849299146355226291780",
-    //     seriesUID: "1.2.840.113619.2.428.3.678656.566.1723853370.188.3"
-    //   }
-    // ).then(function (response) {
-    //   let wsURL = response.data?.websocketUrl;
-    //   if (wsURL) {
-    //     let temp = `ws://192.168.1.6:8888${wsURL}`;
-    //     wslink.connect(context.current, setClient, setBusy, temp);
-    //   }
-    // }).catch(function (error) {
-    //   console.log("error: ", error);
-    // })
-
     const wsURL = "ws://localhost:1234/ws";
+    console.log(`Connect to ${wsURL}`);
     wslink.connect(context.current, setClient, setBusy, wsURL);
   }, []);
 
@@ -72,118 +70,142 @@ function App() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="inherit">
         <Toolbar>
-          <Button variant="outlined" onClick={() => wslink.reinitializeServer(context.current)}>Download</Button>
-          <Button variant="outlined" onClick={() => wslink.createVolume(context.current)}>Create</Button>
-          <Button variant="outlined" onClick={() => wslink.shift(context.current)}>WL</Button>
-          <Button variant="outlined" onClick={() => wslink.activeRotate(context.current)}>Rotate</Button>
-          <Button variant="outlined" onClick={() => wslink.activeZoom(context.current)}>Zoom</Button>
-          <Button variant="outlined" onClick={() => wslink.activePan(context.current)}>Pan</Button>
-          {/* <Button variant="outlined" onClick={() => wslink.applyPreset(context.current, "CT-AAA")}>CT-AAA</Button>
-          <Button variant="outlined" onClick={() => wslink.applyPreset(context.current, "CT-AAA-Bone")}>CT-AAA-Bone</Button>
-          <Button variant="outlined" onClick={() => wslink.applyPreset(context.current, "MR-Default-TOF-GE")}>MR-GE</Button>
-          <Button variant="outlined" onClick={() => wslink.applyPreset(context.current, "MR-Default-TOF-Hitachi")}>MR-Hitachi</Button>
-          <Button variant="outlined" onClick={() => wslink.applyPreset(context.current, "MR-Default-TOF-Philips")}>MR-Philips</Button>
-          <Button variant="outlined" onClick={() => wslink.applyPreset(context.current, "MR-Default-TOF-Siemens")}>MR-Siemens</Button>
-          <Button variant="outlined" onClick={() => wslink.applyPreset(context.current, "MR-Default-TOF-UIH")}>MR-UIH</Button>
-          <Button variant="outlined" onClick={() => wslink.applyPreset(context.current, "Standard")}>Standard</Button> */}
-          {/* <Button variant="outlined" onClick={() => wslink.applyPreset(context.current, "Soft + Skin")}>Soft + Skin</Button> */}
-          {/* <Button variant="outlined" onClick={() => wslink.activeLength(context.current)}>Length</Button> */}
-          {/* <Button variant="outlined" onClick={() => wslink.activeAngle(context.current)}>Angle</Button> */}
-          {/* <Button variant="outlined" onClick={() => wslink.delete(context.current)}>Delete</Button> */}
-          {/* <Button variant="outlined" onClick={() => wslink.activeCut(context.current)}>Crop</Button> */}
-          {/* <Button variant="outlined" onClick={() => wslink.activeCutFreehand(context.current)}>Freehand</Button> */}
-          {/* <Button variant="outlined" onClick={() => wslink.removeBed(context.current)}>Bed</Button> */}
-          {/* <Button variant="outlined" onClick={() => wslink.shading(context.current)}>Shade</Button> */}
-          {/* <Button variant="outlined" onClick={() => wslink.dicomDownload(context.current, "1.2.840.113619.2.438.3.2831208971.408.1719531439.122", "1.2.840.113619.2.438.3.2831208971.408.1719531439.198")}>download</Button> */}
-          <Button variant="outlined" onClick={() => wslink.slice3D(context.current, ["AXIAL", "CORONAL", "SAGITAL"])}>Turn on</Button>
-          <Button variant="outlined" onClick={() => wslink.slice3D(context.current, [])}>Turn off</Button>
-          {/* <Button variant="outlined" onClick={() => wslink.setCrosslines(context.current, [])}>Crosslines</Button> */}
-          {/* <Button variant="outlined" onClick={() => wslink.test(context.current)}>Test</Button> */}
-          {/* <Button variant="outlined" onClick={() => wslink.flythrough(context.current, "PREV")}>Endo-Prev</Button>
-          <Button variant="outlined" onClick={() => wslink.flythrough(context.current, "NEXT")}>Endo-Next</Button>
-          <Button variant="outlined" onClick={() => wslink.flythrough(context.current, "REVERT")}>Endo-Revert</Button> */}
-          <Button variant="outlined" onClick={() => wslink.resetViewport(context.current)}>Reset</Button>
-          {/* <Button variant="outlined" onClick={() => wslink.spin(context.current, "PREV")}>Prev</Button> */}
-          {/* <Button variant="outlined" onClick={() => wslink.spin(context.current, "NEXT")}>Next</Button> */}
-          {/* <Button variant="outlined" onClick={() => wslink.activeWL(context.current)}>WL</Button> */}
-          {/* <Button variant="outlined" onClick={() => wslink.test(context.current)}>Message</Button> */}
+          <Button
+            id="basic-button"
+            aria-controls={openRotate ? 'grouped-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={openRotate ? 'true' : undefined}
+            variant="outlined"
+            size="small"
+            onClick={handleClickRotate}
+          >Rotate</Button>
+          <Menu
+            id="grouped-menu"
+            anchorEl={anchorElRotate}
+            open={openRotate}
+            onClose={handleCloseRotate}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem onClick={() => {
+              wslink.changeViewingAngle(context.current, "ANTERIOR");
+              handleCloseRotate();
+            }}>ANTERIOR</MenuItem>
+            <MenuItem onClick={() => {
+              wslink.changeViewingAngle(context.current, "POSTERIOR");
+              handleCloseRotate();  
+            }}>POSTERIOR</MenuItem>
+            <MenuItem onClick={() => {
+              wslink.changeViewingAngle(context.current, "LEFT");
+              handleCloseRotate();
+            }}>LEFT</MenuItem>
+            <MenuItem onClick={() => {
+              wslink.changeViewingAngle(context.current, "RIGHT");
+              handleCloseRotate();
+            }}>RIGHT</MenuItem>
+            <MenuItem onClick={() => {
+              wslink.changeViewingAngle(context.current, "SUPERIOR");
+              handleCloseRotate();
+            }}>SUPERIOR</MenuItem>
+            <MenuItem onClick={() => {
+              wslink.changeViewingAngle(context.current, "INFERIOR");
+              handleCloseRotate();
+            }}>INFERIOR</MenuItem>
+          </Menu>
+
+          <Button variant="outlined" size="small" onClick={() => wslink.activePan(context.current)}>Pan</Button>
+          <Button variant="outlined" size="small" onClick={() =>wslink.activeZoom(context.current)}>Zoom</Button>
+          <Button variant="outlined" size="small" onClick={() => wslink.activeWL(context.current)}>WL</Button>
+
+          <Button
+            id="basic-button"
+            aria-controls={openMeasurement ? 'grouped-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={openMeasurement ? 'true' : undefined}
+            variant="outlined"
+            size="small"
+            onClick={handleClickMeasurement}
+          >Measurement</Button>
+          <Menu
+            id="grouped-menu"
+            anchorEl={anchorElMeasurement}
+            open={openMeasurement}
+            onClose={handleCloseMeasurement}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem onClick={() => {
+              wslink.activeLength(context.current);
+              handleCloseMeasurement();
+            }}>Length</MenuItem>
+            <MenuItem onClick={() => {
+              wslink.activeAngle(context.current);
+              handleCloseMeasurement();  
+            }}>Angle</MenuItem>
+            <MenuItem onClick={() => {
+              wslink.deleteAnnotations(context.current);
+              handleCloseMeasurement();
+            }}>Delete</MenuItem>
+          </Menu>
+
+          <Button
+            id="basic-button"
+            aria-controls={openPreset ? 'grouped-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={openPreset ? 'true' : undefined}
+            variant="outlined"
+            size="small"
+            onClick={handleClickPreset}
+          >Preset</Button>
+          <Menu
+            id="grouped-menu"
+            anchorEl={anchorElPreset}
+            open={openPreset}
+            onClose={handleClosePreset}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem onClick={() => {
+              wslink.applyVolumePreset(context.current, "CT-AAA");
+              handleClosePreset();
+            }}>CT-AAA</MenuItem>
+            <MenuItem onClick={() => {
+              wslink.applyVolumePreset(context.current, "CT-Bone");
+              handleClosePreset();  
+            }}>CT-Bone</MenuItem>
+            <MenuItem onClick={() => {
+              wslink.applyVolumePreset(context.current, "CT-MIP");
+              handleClosePreset();
+            }}>CT-MIP</MenuItem>
+          </Menu>
+
+          <Button variant="outlined" size="small" onClick={() => wslink.activeCropByBox(context.current)}>CropByBox</Button>
+          <Button variant="outlined" size="small" onClick={() => wslink.activeCropFreehand(context.current, "INSIDE")}>CropFreehand</Button>
+          <Button variant="outlined" size="small" onClick={() => wslink.cropBed(context.current)}>CropBed</Button>
+          <Button variant="outlined" size="small" onClick={() => wslink.reset(context.current)}>Reset</Button>
         </Toolbar>
         <LinearProgress sx={{ opacity: !!busy ? 1 : 0 }} />
       </AppBar>
       <Box className="appContent">
         <div className="views">
-          {/* <div className="volume">
-            <div id="volume" style={{ position: "relative", width: "100%", height: "90%"}}>
-              <RemoteRenderView
-                client={client}
-                viewId="1"
-                crosslineColor={["red", "blue"]}
-                crosslinePositions={crosslinePositions}
-              />
-            </div>
-          </div>
-          <div className="mpr">
-            <div id="axial" style={{ position: "relative", width: "100%", height: "30%", borderLeft: "0.5px groove white", borderBottom: "0.5px groove white" }}>
-              <RemoteRenderView
-                client={client}
-                viewId="2"
-                crosslineColor={["red", "blue"]}
-                crosslinePositions={crosslinePositions}
-              />
-            </div>
-            <div id="coronal" style={{ position: "relative", width: "100%", height: "30%", borderLeft: "0.5px groove white", borderBottom: "0.5px groove white" }}>
-              <RemoteRenderView
-                client={client}
-                viewId="3"
-                crosslineColor={["red", "green"]}
-                crosslinePositions={crosslinePositions}
-              />
-            </div>
-            <div id="sagital" style={{ position: "relative", width: "100%", height: "30%", borderLeft: "0.5px groove white", borderBottom: "0.5px groove white" }}>
-              <RemoteRenderView
-                client={client}
-                viewId="4"
-                crosslineColor={["blue", "green"]}
-                crosslinePositions={crosslinePositions}
-              />
-            </div>
-          </div> */}
           <div style={{ position: "relative", width: "600px", height: "600px", border: "0.5px groove white" }}>
-            <RemoteRenderView
-              client={client}
-              viewId="1"
-              crosslineColor={null}
-              crosslinePositions={null}
-            />
+            <RemoteRenderView client={client} viewId="1" crosslineColor={null} crosslinePositions={null} />
           </div>
           <div style={{ position: "relative", width: "300px", height: "300px", border: "0.5px groove white" }}>
-            <RemoteRenderView
-              client={client}
-              viewId="2"
-              crosslineColor={["green", "blue"]}
-              crosslinePositions={crosslinePositions}
-            />
+            <RemoteRenderView client={client} viewId="2" crosslineColor={["green", "blue"]} crosslinePositions={crosslinePositions} />
           </div>
           <div style={{ position: "relative", width: "300px", height: "300px", border: "0.5px groove white" }}>
-            <RemoteRenderView
-              client={client}
-              viewId="3"
-              crosslineColor={["green", "red"]}
-              crosslinePositions={crosslinePositions}
-            />
+            <RemoteRenderView client={client} viewId="3" crosslineColor={["green", "red"]} crosslinePositions={crosslinePositions} />
           </div>
           <div style={{ position: "relative", width: "300px", height: "300px", border: "0.5px groove white" }}>
-            <RemoteRenderView
-              client={client}
-              viewId="4"
-              crosslineColor={["blue", "red"]}
-              crosslinePositions={crosslinePositions}
-            />
+            <RemoteRenderView client={client} viewId="4" crosslineColor={["blue", "red"]} crosslinePositions={crosslinePositions} />
           </div>
         </div>
       </Box>
     </Box>
-    // <ClientRenderingView />
   );
 }
 
