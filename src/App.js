@@ -36,6 +36,9 @@ function App() {
   const handleClickPreset = (event) => setAnchorElPreset(event.currentTarget);
   const handleClosePreset = () => setAnchorElPreset(null);
 
+  const studyUID = "2.25.223069582453357357042901144491752561623";
+  const seriesUID = "1.3.12.2.1107.5.1.4.96556.30000025033114385023100026305";
+
   useEffect(() => {
     // axios.post("http://localhost:8888/ws/rest/v1/session3d/websocketlink",
     //   {
@@ -70,6 +73,8 @@ function App() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="inherit">
         <Toolbar>
+          <Button variant="outlined" size="small" onClick={() => wslink.create(context.current, studyUID, seriesUID)}>Create</Button>
+
           <Button
             id="basic-button"
             aria-controls={openRotate ? 'grouped-menu' : undefined}
@@ -88,6 +93,10 @@ function App() {
               'aria-labelledby': 'basic-button',
             }}
           >
+            <MenuItem onClick={() => {
+              wslink.activeRotate(context.current);
+              handleCloseRotate();
+            }}>Rotate</MenuItem>
             <MenuItem onClick={() => {
               wslink.changeViewingAngle(context.current, "ANTERIOR");
               handleCloseRotate();

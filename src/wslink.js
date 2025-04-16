@@ -48,8 +48,15 @@ const wslink = {
       context.client = validClient;
       setClient(context.client);
       clientToConnect.endBusy();
-      // Now that the client is ready let's setup the server for us
-      session.call("volume.status", []);
+    }).catch((error) => {
+      console.error(error);
+    });
+  },
+
+  create: (context, studyUID, seriesUID) => {
+    if (context.client) {
+      const session = context.client.getConnection().getSession();
+      session.call("dicom.download", [studyUID, seriesUID]);
       session.subscribe("wslink.channel", ([msg]) => {
         console.log(`progress: ${msg.progress}`);
         if (msg.progress === 100) {
@@ -57,9 +64,7 @@ const wslink = {
           session.call("volume.create", [option]);
         }
       });
-    }).catch((error) => {
-      console.error(error);
-    });
+    }
   },
 
   activeRotate: (context) => {
