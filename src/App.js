@@ -38,13 +38,14 @@ function App() {
 
   const studyUID = "2.25.223069582453357357042901144491752561623";
   const seriesUID = "1.3.12.2.1107.5.1.4.96556.30000025033114385023100026305";
+  const storeUrl = "http://192.168.1.63:8042/wado-rs";
+  const storeAuth = "Basic b3J0aGFuYzpvcnRoYW5j".replace(" ", "-");
 
   useEffect(() => {
+    // Ket noi websocket toi 3d-server qua viewer-server
     // axios.post("http://localhost:8888/ws/rest/v1/session3d/websocketlink",
     //   {
-    //     session2D: "3dcc5814-942b-431d-8595-035c3b1f26d4",
-    //     studyUID: "2.25.71595247674320627900972793100987989188",
-    //     seriesUID: "1.2.840.113619.2.428.3.678656.872.1740100172.148.3"
+    //     session2D: "3dcc5814-942b-431d-8595-035c3b1f26d4"
     //   }
     // ).then(function (response) {
     //   let wsURL = response.data?.websocketUrl;
@@ -55,7 +56,8 @@ function App() {
     // }).catch(function (error) {
     //   console.log("error: ", error);
     // })
-    const wsURL = "ws://localhost:1234/ws";
+    // Ket noi websocket toi 3d-server
+    const wsURL = `ws://localhost:1234/ws?storeUrl=${storeUrl}&storeAuth=${storeAuth}`;
     console.log(`Connect to ${wsURL}`);
     wslink.connect(context.current, setClient, setBusy, wsURL);
   }, []);
