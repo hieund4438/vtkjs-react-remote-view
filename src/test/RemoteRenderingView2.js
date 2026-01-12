@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import './RemoteRenderingView.css';
-import vtkRemoteView from "vtk.js/Sources/Rendering/Misc/RemoteView";
-
+import vtkRemoteView from '@kitware/vtk.js/Rendering/Misc/RemoteView';
 const TOPIC = "mpr.communication.channel";
 
 const RemoteRenderView2 = ({
