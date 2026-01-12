@@ -11,7 +11,6 @@ import {
   MenuItem
 } from "@mui/material";
 import RemoteRenderView from "./RemoteRenderingView";
-// import axios from "axios";
 
 const TOPIC = "mpr.channel";
 
@@ -21,45 +20,34 @@ function App() {
   const [busy, setBusy] = useState(0);
   const [crosslinePositions, setCrosslinePositions] = useState(null);
 
+  // --- Giữ nguyên các State điều khiển Menu ---
   const [anchorElRotate, setAnchorElRotate] = useState(null);
   const openRotate = Boolean(anchorElRotate);
-  const handleClickRotate = (event) => setAnchorElRotate(event.currentTarget);
-  const handleCloseRotate = () => setAnchorElRotate(null);
+  const handleClickRotate = (event) => { setAnchorElRotate(event.currentTarget); };
+  const handleCloseRotate = () => { setAnchorElRotate(null); };
 
   const [anchorElMeasurement, setAnchorElMeasurement] = useState(null);
   const openMeasurement = Boolean(anchorElMeasurement);
-  const handleClickMeasurement = (event) => setAnchorElMeasurement(event.currentTarget);
-  const handleCloseMeasurement = () => setAnchorElMeasurement(null);
+  const handleClickMeasurement = (event) => { setAnchorElMeasurement(event.currentTarget); };
+  const handleCloseMeasurement = () => { setAnchorElMeasurement(null); };
 
   const [anchorElPreset, setAnchorElPreset] = useState(null);
   const openPreset = Boolean(anchorElPreset);
-  const handleClickPreset = (event) => setAnchorElPreset(event.currentTarget);
-  const handleClosePreset = () => setAnchorElPreset(null);
+  const handleClickPreset = (event) => { setAnchorElPreset(event.currentTarget); };
+  const handleClosePreset = () => { setAnchorElPreset(null); };
 
-  const studyUID = "2.25.223069582453357357042901144491752561623";
-  const seriesUID = "1.3.12.2.1107.5.1.4.96556.30000025033114385023100026305";
-  const storeUrl = "http://192.168.1.63:8042/wado-rs";
-  const storeAuth = "Basic b3J0aGFuYzpvcnRoYW5j".replace(" ", "-");
+  // Giữ lại UID làm định danh nội bộ cho PoC, bỏ Store URL/Auth
+  const studyUID = "poc-study-001";
+  const seriesUID = "poc-series-001";
 
   useEffect(() => {
-    // Ket noi websocket toi 3d-server qua viewer-server
-    // axios.post("http://localhost:8888/ws/rest/v1/session3d/websocketlink",
-    //   {
-    //     session2D: "3dcc5814-942b-431d-8595-035c3b1f26d4"
-    //   }
-    // ).then(function (response) {
-    //   let wsURL = response.data?.websocketUrl;
-    //   if (wsURL) {
-    //     let temp = `ws://localhost:8888${wsURL}`;
-    //     wslink.connect(context.current, setClient, setBusy, temp);
-    //   }
-    // }).catch(function (error) {
-    //   console.log("error: ", error);
-    // })
-    // Ket noi websocket toi 3d-server
-    const wsURL = `ws://localhost:1234/ws?storeUrl=${storeUrl}&storeAuth=${storeAuth}`;
-    console.log(`Connect to ${wsURL}`);
-    wslink.connect(context.current, setClient, setBusy, wsURL);
+    // Chỉ kết nối tới server Python local, không truyền tham số Orthanc
+    const wsURL = "ws://localhost:1234/ws";
+    console.log(`Kết nối tới PoC Server: ${wsURL}`);
+
+    if (wsURL) {
+      wslink.connect(context.current, setClient, setBusy, wsURL);
+    }
   }, []);
 
   useEffect(() => {
@@ -105,7 +93,7 @@ function App() {
             }}>ANTERIOR</MenuItem>
             <MenuItem onClick={() => {
               wslink.changeViewingAngle(context.current, "POSTERIOR");
-              handleCloseRotate();  
+              handleCloseRotate();
             }}>POSTERIOR</MenuItem>
             <MenuItem onClick={() => {
               wslink.changeViewingAngle(context.current, "LEFT");
@@ -126,7 +114,7 @@ function App() {
           </Menu>
 
           <Button variant="outlined" size="small" onClick={() => wslink.activePan(context.current)}>Pan</Button>
-          <Button variant="outlined" size="small" onClick={() =>wslink.activeZoom(context.current)}>Zoom</Button>
+          <Button variant="outlined" size="small" onClick={() => wslink.activeZoom(context.current)}>Zoom</Button>
           <Button variant="outlined" size="small" onClick={() => wslink.activeWL(context.current)}>WL</Button>
 
           <Button
@@ -153,7 +141,7 @@ function App() {
             }}>Length</MenuItem>
             <MenuItem onClick={() => {
               wslink.activeAngle(context.current);
-              handleCloseMeasurement();  
+              handleCloseMeasurement();
             }}>Angle</MenuItem>
             <MenuItem onClick={() => {
               wslink.deleteAnnotations(context.current);
@@ -185,7 +173,7 @@ function App() {
             }}>CT-AAA</MenuItem>
             <MenuItem onClick={() => {
               wslink.applyVolumePreset(context.current, "CT-Bone");
-              handleClosePreset();  
+              handleClosePreset();
             }}>CT-Bone</MenuItem>
             <MenuItem onClick={() => {
               wslink.applyVolumePreset(context.current, "CT-MIP");
